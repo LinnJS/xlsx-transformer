@@ -1,3 +1,4 @@
+const fs = require('fs');
 const xlsx = require('xlsx');
 
 const options = { cellDates: true };
@@ -54,7 +55,7 @@ const removeDuplicateRecords = removeAndAddRows.reduce((acc, record) => {
   return acc;
 }, []);
 
-const removeAposFromRecords = removeAndAddRows.map((record) => {
+const removeAposFromRecords = removeDuplicateRecords.map((record) => {
   const recordKeys = Object.keys(record);
 
   const newData = recordKeys.reduce((acc, key) => {
@@ -95,4 +96,6 @@ const newCSV = xlsx.utils.sheet_to_csv(newWorksheet, {
   blankrows: true,
 });
 
-console.log(newCSV);
+fs.writeFile('test.csv', newCSV, (err) => {
+  console.error(err);
+});
