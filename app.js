@@ -45,32 +45,32 @@ const removeAndAddRows = JSONDataWithoutCOVID.map((record) => {
 const removeAposFromRecords = removeAndAddRows.map((record) => {
   const recordKeys = Object.keys(record);
 
-  recordKeys.map((key) => {
+  const newData = recordKeys.reduce((acc, key) => {
     const value = record[key];
+    const cleanedValue = value.replace(/'/g, '');
+    console.log('cleanedValue: ', cleanedValue);
 
-    if (value.includes("'")) {
-      value.replace(/\W/g, ' ');
-      console.log('value: ', value);
-      return value;
-    }
-  });
+    return {
+      ...acc,
+      [key]: cleanedValue,
+    };
+  }, {});
 
-  return record;
+  return newData;
 });
 
-console.log('removeAposFromRecords: ', removeAposFromRecords);
+// console.log('removeAposFromRecords: ', removeAposFromRecords);
 
 const toDoubleQuotedJSON = (json) => {
   const JSONString = JSON.stringify(json);
-  const JSONWithoutApos = JSONString.replace(/'/, '');
-  const JSONWithDoubleQuotes = JSONWithoutApos.replace(/'/g, '"');
+  const JSONWithDoubleQuotes = JSONString.replace(/'/g, '"');
 
   return JSON.parse(JSONWithDoubleQuotes);
 };
-// toDoubleQuotedJSON(removeAndAddRows);
 
-// console.log('removeAndAddRows: ', removeAndAddRows);
-// console.log('toDoubleQuotedJSON: ', toDoubleQuotedJSON(removeAndAddRows));
+toDoubleQuotedJSON(removeAposFromRecords);
+
+console.log('toDoubleQuotedJSON: ', toDoubleQuotedJSON(removeAposFromRecords));
 
 const newWorkbook = xlsx.utils.book_new();
 const newWorksheet = xlsx.utils.json_to_sheet(removeAndAddRows);
