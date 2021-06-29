@@ -88,6 +88,7 @@ xlsx.utils.book_append_sheet(newWorkbook, newWorksheet, 'Transformed facilities 
 xlsx.writeFile(newWorkbook, 'transformedFile.xlsx');
 
 // create csv
+// TODO: change your environmental delimiter on your system from “,” to “;”
 const newCSV = xlsx.utils.sheet_to_csv(newWorksheet, {
   FS: ';',
   RS: '\n',
