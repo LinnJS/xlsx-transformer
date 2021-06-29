@@ -38,9 +38,27 @@ const removeAndAddRows = JSONDataWithoutCOVID.map((record) => {
   const hasFacilityDescription = !!record['Facility description of services'];
   hasFacilityDescription ? record['Facility description of services'] : (record['Facility description of services'] = '');
 
-  // TODO: remove duplicates from column A (string match?) what is column A? ID?
   return record;
 });
+
+// TODO: remove duplicates from column A (string match?) what is column A? ID?
+const removeDuplicateRecords = removeAndAddRows.reduce((acc, record) => {
+  // console.log('record: ', record);
+
+  const hasDuplicate = (row) => {
+    // console.log('row: ', row);
+    return (row) => row.ID === record.ID && row.Facility === record.Facility;
+  };
+
+  if (!acc.some(hasDuplicate)) {
+    console.log('hit');
+    acc.push(record);
+  }
+
+  return acc;
+}, []);
+
+// console.log('removeDuplicateRecords: ', removeDuplicateRecords);
 
 const removeAposFromRecords = removeAndAddRows.map((record) => {
   const recordKeys = Object.keys(record);
@@ -58,13 +76,9 @@ const removeAposFromRecords = removeAndAddRows.map((record) => {
   return newData;
 });
 
-// console.log('removeAposFromRecords: ', removeAposFromRecords);
-
 const toDoubleQuotedJSON = (json) => {
   const JSONString = JSON.stringify(json);
   const JSONWithDoubleQuotes = JSONString.replace(/'/g, '"');
-
-  console.log('JSONWithDoubleQuotes: ', JSONWithDoubleQuotes);
 
   return JSON.parse(JSONWithDoubleQuotes);
 };
@@ -72,7 +86,7 @@ const toDoubleQuotedJSON = (json) => {
 toDoubleQuotedJSON(removeAposFromRecords);
 
 const newWorkbook = xlsx.utils.book_new();
-const newWorksheet = xlsx.utils.json_to_sheet(removeAndAddRows);
+const newWorksheet = xlsx.utils.json_to_sheet(toDoubleQuotedJSON(removeAposFromRecords));
 xlsx.utils.book_append_sheet(newWorkbook, newWorksheet, 'Transformed facilities list');
 
 xlsx.writeFile(newWorkbook, 'transformedFile.xlsx');
