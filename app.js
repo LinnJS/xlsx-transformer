@@ -43,8 +43,6 @@ const removeAndAddRows = JSONDataWithoutCOVID.map((record) => {
 
 // TODO: remove duplicates from column A (string match?) what is column A? ID?
 const removeDuplicateRecords = removeAndAddRows.reduce((acc, record) => {
-  // console.log('record: ', record);
-
   const hasDuplicate = (row) => {
     return row.ID === record.ID;
   };
@@ -55,8 +53,6 @@ const removeDuplicateRecords = removeAndAddRows.reduce((acc, record) => {
 
   return acc;
 }, []);
-
-console.log('removeDuplicateRecords: ', removeDuplicateRecords);
 
 const removeAposFromRecords = removeAndAddRows.map((record) => {
   const recordKeys = Object.keys(record);
@@ -73,9 +69,6 @@ const removeAposFromRecords = removeAndAddRows.map((record) => {
 
   return newData;
 });
-
-// 503 records
-// console.log('removeAposFromRecords: ', removeAposFromRecords);
 
 const toDoubleQuotedJSON = (json) => {
   const JSONString = JSON.stringify(json);
@@ -94,4 +87,12 @@ xlsx.utils.book_append_sheet(newWorkbook, newWorksheet, 'Transformed facilities 
 xlsx.writeFile(newWorkbook, 'transformedFile.xlsx');
 
 // create csv
-const newCSV = xlsx.utils.sheet_to_csv(newWorksheet);
+const newCSV = xlsx.utils.sheet_to_csv(newWorksheet, {
+  FS: ';',
+  RS: '\n',
+  dateNF: 'dd"."mm"."yyyy',
+  strip: false,
+  blankrows: true,
+});
+
+console.log(newCSV);

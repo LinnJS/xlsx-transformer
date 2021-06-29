@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "write": "node app.js echo > test.csv",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
