@@ -46,19 +46,17 @@ const removeDuplicateRecords = removeAndAddRows.reduce((acc, record) => {
   // console.log('record: ', record);
 
   const hasDuplicate = (row) => {
-    // console.log('row: ', row);
-    return (row) => row.ID === record.ID && row.Facility === record.Facility;
+    return row.ID === record.ID;
   };
 
   if (!acc.some(hasDuplicate)) {
-    console.log('hit');
     acc.push(record);
   }
 
   return acc;
 }, []);
 
-// console.log('removeDuplicateRecords: ', removeDuplicateRecords);
+console.log('removeDuplicateRecords: ', removeDuplicateRecords);
 
 const removeAposFromRecords = removeAndAddRows.map((record) => {
   const recordKeys = Object.keys(record);
@@ -76,6 +74,9 @@ const removeAposFromRecords = removeAndAddRows.map((record) => {
   return newData;
 });
 
+// 503 records
+// console.log('removeAposFromRecords: ', removeAposFromRecords);
+
 const toDoubleQuotedJSON = (json) => {
   const JSONString = JSON.stringify(json);
   const JSONWithDoubleQuotes = JSONString.replace(/'/g, '"');
@@ -83,10 +84,14 @@ const toDoubleQuotedJSON = (json) => {
   return JSON.parse(JSONWithDoubleQuotes);
 };
 
-toDoubleQuotedJSON(removeAposFromRecords);
-
+// create workbook
 const newWorkbook = xlsx.utils.book_new();
+// Add transformed data to new worksheet
 const newWorksheet = xlsx.utils.json_to_sheet(toDoubleQuotedJSON(removeAposFromRecords));
+// append worksheet to workbook
 xlsx.utils.book_append_sheet(newWorkbook, newWorksheet, 'Transformed facilities list');
-
+// print that workbook to the project directory
 xlsx.writeFile(newWorkbook, 'transformedFile.xlsx');
+
+// create csv
+const newCSV = xlsx.utils.sheet_to_csv(newWorksheet);
