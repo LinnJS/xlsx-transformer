@@ -48,7 +48,6 @@ const removeAposFromRecords = removeAndAddRows.map((record) => {
   const newData = recordKeys.reduce((acc, key) => {
     const value = record[key];
     const cleanedValue = value.replace(/'/g, '');
-    console.log('cleanedValue: ', cleanedValue);
 
     return {
       ...acc,
@@ -65,12 +64,12 @@ const toDoubleQuotedJSON = (json) => {
   const JSONString = JSON.stringify(json);
   const JSONWithDoubleQuotes = JSONString.replace(/'/g, '"');
 
+  console.log('JSONWithDoubleQuotes: ', JSONWithDoubleQuotes);
+
   return JSON.parse(JSONWithDoubleQuotes);
 };
 
 toDoubleQuotedJSON(removeAposFromRecords);
-
-console.log('toDoubleQuotedJSON: ', toDoubleQuotedJSON(removeAposFromRecords));
 
 const newWorkbook = xlsx.utils.book_new();
 const newWorksheet = xlsx.utils.json_to_sheet(removeAndAddRows);
