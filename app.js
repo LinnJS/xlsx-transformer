@@ -97,6 +97,6 @@ const newCSV = xlsx.utils.sheet_to_csv(newWorksheet, {
   blankrows: true,
 });
 
-fs.writeFile('test.csv', newCSV, (err) => {
+fs.writeFile('transformedCSV.csv', newCSV, (err) => {
   console.error(err);
 });
