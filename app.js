@@ -55,12 +55,12 @@ const removeDuplicateRecords = removeAndAddRows.reduce((acc, record) => {
   return acc;
 }, []);
 
-const removeAposFromRecords = removeDuplicateRecords.map((record) => {
+const escapeAposFromRecords = removeDuplicateRecords.map((record) => {
   const recordKeys = Object.keys(record);
 
   const newData = recordKeys.reduce((acc, key) => {
     const value = record[key];
-    const cleanedValue = value.replace(/'/g, '');
+    const cleanedValue = value.replace(/'/g, '"');
 
     return {
       ...acc,
@@ -81,7 +81,7 @@ const toDoubleQuotedJSON = (json) => {
 // create workbook
 const newWorkbook = xlsx.utils.book_new();
 // Add transformed data to new worksheet
-const newWorksheet = xlsx.utils.json_to_sheet(toDoubleQuotedJSON(removeAposFromRecords));
+const newWorksheet = xlsx.utils.json_to_sheet(toDoubleQuotedJSON(escapeAposFromRecords));
 // append worksheet to workbook
 xlsx.utils.book_append_sheet(newWorkbook, newWorksheet, 'Transformed facilities list');
 // print that workbook to the project directory
