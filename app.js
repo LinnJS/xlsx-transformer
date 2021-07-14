@@ -40,7 +40,6 @@ const removeAndAddRows = JSONDataWithoutCOVID.map((record) => {
   return record;
 });
 
-// TODO: remove duplicates from column A (string match?) what is column A? ID?
 const removeDuplicateRecords = removeAndAddRows.reduce((acc, record) => {
   const hasDuplicate = (row) => {
     return row.ID === record.ID;
@@ -86,7 +85,6 @@ xlsx.utils.book_append_sheet(newWorkbook, newWorksheet, 'Transformed facilities 
 xlsx.writeFile(newWorkbook, 'transformedFile.xlsx');
 
 // create csv
-// TODO: change your environmental delimiter on your system from “,” to “;”
 const newCSV = xlsx.utils.sheet_to_csv(newWorksheet, {
   FS: ';',
   RS: '\n',
