@@ -13,8 +13,6 @@ const removeNA = JSONData.filter((record) => !record['ID'].includes('n/a'));
 // remove rows that include "COVID-19 Vaccines"
 const JSONDataWithoutCOVID = removeNA.filter((record) => !record['ID'].includes('COVID-19'));
 
-// TODO: change your environmental delimiter on your system from “,” to “;”
-
 const removeAndAddRows = JSONDataWithoutCOVID.map((record) => {
   /* Data shape of record
     {
